@@ -4,6 +4,8 @@
 #
 SCRIPTLOG="/tmp/startscriptlog"
 #
+timedatectl set-timezone Europe/Moscow
+if [ $? -ne 0 ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR, timezone don't set Europe/Moscow" >> ${SCRIPTLOG} && echo "look /tmp/startscriptlog" && exit 0; fi
 apt-get update
 if [ $? -ne 0 ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR, system don't update" >> ${SCRIPTLOG} && echo "look /tmp/startscriptlog" && exit 0; fi
 apt-get install git less nano nmap -y
