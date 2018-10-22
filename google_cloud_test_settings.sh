@@ -11,7 +11,6 @@ if [ $? -ne 0 ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR, system don't u
 apt-get install git less nano nmap -y
 if [ $? -ne 0 ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR, applications don't install" >> ${SCRIPTLOG} && echo "look /tmp/startscriptlog" && exit 0; fi
 sed -i -e 's/PermitRootLogin prohibit-password/PermitRootLogin yes/g' -e 's/PermitRootLogin no/PermitRootLogin yes/g'  -e 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-
 egrep 'PermitRootLogin yes' /etc/ssh/sshd_config && grep 'PasswordAuthentication yes' /etc/ssh/sshd_config
 if [ $? -ne 0 ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR, settings in /etc/ssh/sshd_config don't change" >> ${SCRIPTLOG} && echo "look /tmp/startscriptlog" && exit 0; fi
 systemctl restart ssh
