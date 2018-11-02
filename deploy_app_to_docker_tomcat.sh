@@ -14,7 +14,7 @@ PROD_IP=
 #
 REGISTRY_USER="usertmp"
 REGISTRY_PASS="passwordtmp7653"
-CONTAINER_NAME=test1
+CONTAINER_NAME="test1"
 #
 GIT_PATH="https://github.com/cp38510/java_Test.git"
 DIRECTORY_FOR_CLONE_GIT="/tmp/git"
