@@ -57,7 +57,7 @@
   - name:
     fetch:
       src: "{{ item }}"
-      dest: /etc/ansible/prod.war
+      dest: /tmp/prod.war
       flat: yes
     with_items: '{{ path_files.stdout }}'
 
@@ -89,7 +89,7 @@
 
   - name: Copy *.war file to "Prod" server
     copy:
-      src: ./prod.war
+      src: /tmp/prod.war
       dest: /var/lib/tomcat8/webapps/prod.war
 
   - name: Restart tomcat8 service on "Prod" server
