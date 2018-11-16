@@ -1,0 +1,109 @@
+---
+- name: Install Java and Maven on "Build" server, compiling .war
+  hosts: build
+  become: yes
+  vars:
+    git_repo: https://github.com/cp38510/java_Test.git
+
+
+
+  tasks:
+  - name: Update "Build" server
+    apt:
+      update_cache: yes
+
+  - name: Add Java repository
+    apt_repository:
+      repo: ppa:webupd8team/java
+
+  - name: Update "Build" server
+    apt:
+      update_cache: yes
+
+  - name: Accept Oracle license
+    shell: echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+
+  - name: Install Java8 package on "Build" server
+    apt:
+      name: oracle-java8-installer
+      state: present
+
+  - name: Set JAVA_HOME directory
+    shell: export JAVA_HOME=/usr/lib/jvm/java-8-oracle/
+
+  - name: Install Maven and Git packages on "Build" server
+    apt:
+      name: 
+       - maven
+       - git
+      state: present
+
+  - name: Clean directory /tmp/git on "Build" server
+    file:
+      path: /tmp/git
+      state: absent
+
+  - name: Clone git repository on "Build" server
+    git:
+      repo: "{{ git_repo }}"
+      dest: /tmp/git
+
+  - name: Build package from /tmp/git on "Build" server
+    shell: mvn package -f /tmp/git
+
+  - name: Copy *.war file from "Build" server to localhost
+    shell: "ls /tmp/git/target/*.war"
+    register: path_files
+  - name:
+    fetch:
+      src: "{{ item }}"
+      dest: /etc/ansible/prod.war
+      flat: yes
+    with_items: '{{ path_files.stdout }}'
+
+  - name: Tasks report on the "Build" server
+    debug:
+      msg:
+        - "*"
+        - "*"
+        - "*"
+        - "All tasks on the "Build" server compleated!"
+        - "*"
+        - "*"
+        - "*"
+
+
+
+
+- name: Install "Tomcat8" on "Prod" server
+  hosts: prod
+  become: yes
+
+
+  tasks:
+  - name: Update repositories cache and install "Tomcat8" package on "Prod" server
+    apt:
+      name: tomcat8
+      state: present
+      update_cache: yes
+
+  - name: Copy *.war file to "Prod" server
+    copy:
+      src: ./prod.war
+      dest: /var/lib/tomcat8/webapps/prod.war
+
+  - name: Restart tomcat8 service on "Prod" server
+    service:
+      name: tomcat8
+      state: restarted
+
+  - name: Report
+    debug:
+      msg:
+        - "*"
+        - "*"
+        - "*"
+        - "All tasks on the "Prod" server compleated!, go to http://{{ inventory_hostname }}:8080/prod/"
+        - "*"
+        - "*"
+        - "*"
