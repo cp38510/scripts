@@ -1,6 +1,14 @@
 #!/bin/bash
 #script to search all domain IP-addresses
 #
+function show_usage {
+    echo -e "Usage: $0 domain_name\nExample: $0 vk.com\n"
+    exit 1
+}
+#
+if [ $# -ne 1 ]; then
+    show_usage
+else
 #remove temporary files, if they exist
 rm -rf /tmp/tmpvartmp777
 rm -rf /tmp/tmpvartmp778
@@ -19,3 +27,4 @@ whois -h whois.ripe.net -i origin $ASUNIQ | grep route | awk '{print $2}' | grep
 rm -rf /tmp/tmpvartmp777
 rm -rf /tmp/tmpvartmp778
 echo "Done!"
+fi
