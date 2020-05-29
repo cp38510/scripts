@@ -21,5 +21,8 @@ systemctl restart sshd
 #sed -i '/root/s/\:\*/\:$1$jYePn7UP$1Q6SYWeihp9IWcB3taOeq\//g' /etc/shadow
 #grep root /etc/shadow |grep ':$1$jYePn7UP$1Q6SYWeihp9IWcB3taOeq/:'
 #if [ $? -ne 0 ]; then echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR, root passwd don't change in /etc/shadow" >> ${SCRIPTLOG} && echo "look /tmp/startscriptlog"; fi
+mkdir -p /root/.ssh
+chmod 700 /root/.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdEuCzFOhJ9pYBJwrs3zgNReFFqEdM6sCiZ1aIlubdle02jlVM1IcTt7Mu+d8X97zVkdjZxCy1KxTgpIRko2eWsjvRJ9XEb8725ZUQw16uJv5V0ZaIaZFTimTO5Hby341B4xTrSWxr8cXjXZ1YZdh3hcYUbQw8yVnOM/UNJ7exa5UaIbvoMKGJGBNy/nII8sRD6wstm+9VdUREe1PMdb8IAigi5q5S5R9kRSA16pkM+kyf4yzcDqD02T4Mwv4Uk2P2uS/dBeDfImq6EAW7NbBOQ/6hfmcZlGWivT91vc5dwMQiXwbBvOfzBDqtQ+Y9N24LHSZYLTAxhAqEyZ60/cJF root" >> /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
 echo "Well done!"
