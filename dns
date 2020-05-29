@@ -1,0 +1,19 @@
+# Script for reload Bind/named server configuration
+
+#!/bin/bash
+echo ""
+tput setaf 2; echo "Testing /etc/named/techlab.s7.conf config:"; tput sgr0
+named-checkconf /etc/named/techlab.s7.conf
+echo ""
+
+    read -p "Apply new configuration?(Y/y or N/n): " yn
+    case $yn in
+        [Yy]* ) rndc reload;;
+        [Nn]* ) echo "Exit" && exit 1;;
+        * ) echo "Please answer yes or no.";;
+    esac
+echo ""
+    read -p "Set commit description: " com
+    cd /etc/named/ && git add . && git commit -m "$com" > /dev/null && git push && cd - > /dev/null
+
+tput setaf 2; echo -e "\nDone!"; tput sgr0
